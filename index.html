@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Cloudinary Image Upscaler</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <span class="brand-icon">⚡</span>
+      <div>
+        <div class="brand-name">Cloudinary Image Upscaler</div>
+        <div class="brand-sub">PROFESSIONAL GRADE AI ENHANCEMENT</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-outline" id="settingsBtn">⚙ Settings</button>
+      <button class="btn-outline" id="clearBtn">✕ Clear All</button>
+      <label class="btn-dark" for="folderInput">⊞ Select Folder</label>
+      <input type="file" id="folderInput" webkitdirectory multiple accept="image/*" hidden />
+    </div>
+  </header>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚙ Cloudinary Settings</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+      <label>Cloud Name</label>
+      <input type="text" id="cloudName" placeholder="e.g. my-cloud-xyz" />
+      <label>Upload Preset <em>(must be Unsigned)</em></label>
+      <input type="text" id="uploadPreset" placeholder="e.g. ml_default" />
+      <label>Concurrency <em>(images processed in parallel)</em></label>
+      <input type="number" id="concurrency" value="2" min="1" max="5" />
+      <div class="modal-hint">
+        <strong>Free plan = 25 credits/month.</strong> Each upscale uses ~1 credit.
+        Concurrency of 2 is safe for free tier. Don't set above 3.
+      </div>
+      <div class="modal-setup">
+        <strong>Setup:</strong> cloudinary.com → Dashboard → copy Cloud Name. Then Settings → Upload → Add upload preset
+        → Unsigned → Save.
+      </div>
+      <button class="btn-dark" id="saveSettings">Save Settings</button>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <main class="layout" id="mainLayout">
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">📂</div>
+      <h1>Select a folder to begin</h1>
+      <p>All images in the folder will be AI-upscaled using Cloudinary and downloaded as a ZIP.</p>
+      <label class="btn-dark btn-lg" for="folderInput">⊞ Select Folder</label>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" hidden>
+      <div class="sidebar-card">
+        <div class="card-title">Session Overview</div>
+        <div class="stat-row"><span class="stat-label">Folder:</span><span class="stat-val" id="statFolder">—</span>
+        </div>
+        <div class="stat-row"><span class="stat-label">Total:</span><span class="stat-val" id="statTotal">0</span></div>
+        <div class="stat-row"><span class="stat-label">Processing:</span><span class="stat-val green"
+            id="statProcessing">0</span></div>
+        <div class="stat-row"><span class="stat-label">Completed:</span><span class="stat-val green"
+            id="statCompleted">0</span></div>
+        <div class="stat-row"><span class="stat-label">Errors:</span><span class="stat-val red" id="statErrors">0</span>
+        </div>
+      </div>
+
+      <div class="credit-note">💳 Est. credits: <strong id="creditEst">0</strong> / 25 this session</div>
+
+      <button class="btn-dark full-w" id="startBtn">⚡ Start Upscaling</button>
+      <button class="btn-outline full-w" id="downloadBtn" hidden>⬇ Download ZIP</button>
+    </aside>
+
+    <!-- GRID -->
+    <section class="grid-area" id="gridArea" hidden>
+      <div class="image-grid" id="imageGrid"></div>
+    </section>
+
+  </main>
+
+  <!-- TOAST -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
